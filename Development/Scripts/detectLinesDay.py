@@ -4,7 +4,7 @@ import math
 import cv2
 
 #call the video source
-cap = cv2.VideoCapture('video2.mp4')
+cap = cv2.VideoCapture('../../../../video2.mp4')
 
 w1 = cap.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)  #Obtain video dimension x
 h1 = cap.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT) #Obtain video dimension y
@@ -32,7 +32,7 @@ while (cap.isOpened()):
     cv2.rectangle(video, (roiX, roiY), (w,h ), (255, 0, 0),1) 
     
     hsv = cv2.cvtColor(video, cv2.COLOR_BGR2HSV)              #separate the processed image intensity   
-    #grayROI  = hsv[roiY:roiY+roiHig, roiX:roiX+roiWid]        #ROI
+    grayROI  = hsv[roiY:roiY+roiHig, roiX:roiX+roiWid]        #ROI
     
     low_white = np.array([0,0,170],dtype=np.uint8)            #lower parameter for filtering the image hsv
     high_white = np.array([255,255,255],dtype=np.uint8)       #Upper parameter for filtering the image hsv
