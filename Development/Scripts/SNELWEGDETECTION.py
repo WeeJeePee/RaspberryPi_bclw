@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 #Videocapture
-video = cv2.VideoCapture("../../../../video2.mp4")
+video = cv2.VideoCapture("../../../../snelweg.mp4")
 i = 1
 def roi(video, vertices):
 	maskz = np.zeros_like(video)
@@ -17,7 +17,7 @@ while True:
     #Nieuwe laag om op te drawen
     line_image = np.copy(orig_frame) * 0  
     if not ret:
-        video = cv2.VideoCapture("../../../../video2.mp4")
+        video = cv2.VideoCapture("../../../../snelweg.mp4")
         continue
  
     frame = cv2.GaussianBlur(orig_frame, (5, 5), 0)
