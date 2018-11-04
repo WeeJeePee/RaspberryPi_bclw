@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 #Videocapture
-video = cv2.VideoCapture("../../Video/template-matching/usa_videos/challenge.mp4")
+video = cv2.VideoCapture("../../Video/template-matching/spanje/weg-spanje-2.mp4")
 i = 1
 def roi(video, vertices):
 	maskz = np.zeros_like(video)
@@ -38,33 +38,34 @@ while True:
     target = cv2.bitwise_and(frame,frame, mask=mask)
     #Canny
     edges = cv2.Canny(target, 75, 150)
-    vertices = np.array([[325,650],[450,450],[600,400],[600,400],[650,400],[1200,650],
+    vertices = np.array([[200,650],[450,500],[450,500],[600,425],[750,425],[1250,650],
                          ], np.int32)
     edges = roi(edges,[vertices])
-    lines = cv2.HoughLinesP(edges, 1, np.pi/180, 50, maxLineGap=5)
+    lines = cv2.HoughLinesP(edges, 1, np.pi/180, 50, maxLineGap=20)
     cv2.polylines(frame,[vertices],True,(0,255,255))
     
     if lines is not None:
         for line in lines:
-			#HEEL VEEL LINES FIX DIT LATER XDDD
             x1, y1, x2, y2 = line[1]
-            cv2.line(line_image, (x1, y1), (x2, y2), (48, 255, 255), 20)
+            cv2.line(line_image, (x1, y1), (x2, y2), (90, 255, 255), 20)
             x1, y1, x2, y2 = line[2]
-            cv2.line(line_image, (x1, y1), (x2, y2), (48, 255, 255), 20)
-            
-			
+            cv2.line(line_image, (x1, y1), (x2, y2), (90, 255, 255), 20)      
+            x1, y1, x2, y2 = line[3]
+            cv2.line(line_image, (x1, y1), (x2, y2), (90, 255, 255), 20)
+            x1, y1, x2, y2 = line[4]
+            cv2.line(line_image, (x1, y1), (x2, y2), (90, 255, 255), 20)  			
             
             
             lines_edges = cv2.addWeighted(frame, 1, line_image, 1, 0)
     
 	cv2.namedWindow("frameOutput", cv2.WINDOW_NORMAL)
-	#cv2.namedWindow("edgesOutput", cv2.WINDOW_NORMAL)
+	cv2.namedWindow("edgesOutput", cv2.WINDOW_NORMAL)
 	frameR = cv2.resize(lines_edges, (800,600))
 	
 	edgesR = cv2.resize(edges, (800,600))
 	
     cv2.imshow("frameOutput", frameR)
-    #cv2.imshow("edgesOutput", edgesR)
+    cv2.imshow("edgesOutput", edgesR)
  
     if cv2.waitKey(1) & 0xFF == ord('q'):
 		break

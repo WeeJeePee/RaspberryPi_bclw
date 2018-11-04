@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 #Videocapture
-video = cv2.VideoCapture("../../Video/weg-spanje-1.mp4")
+video = cv2.VideoCapture("../../Video/template-matching/spanje/weg-spanje-1.mp4")
 i = 1
 def roi(video, vertices):
 	maskz = np.zeros_like(video)
@@ -38,7 +38,7 @@ while True:
     target = cv2.bitwise_and(frame,frame, mask=mask)
     #Canny
     edges = cv2.Canny(target, 75, 150)
-    vertices = np.array([[325,650],[400,450],[600,400],[600,400],[650,400],[1000,650],
+    vertices = np.array([[325,650],[450,500],[600,500],[600,425],[650,425],[1200,650],
                          ], np.int32)
     edges = roi(edges,[vertices])
     lines = cv2.HoughLinesP(edges, 1, np.pi/180, 50, maxLineGap=10)
@@ -51,7 +51,10 @@ while True:
             cv2.line(line_image, (x1, y1), (x2, y2), (48, 255, 255), 20)
             x1, y1, x2, y2 = line[2]
             cv2.line(line_image, (x1, y1), (x2, y2), (48, 255, 255), 20)
-            
+            x1, y1, x2, y2 = line[3]
+            cv2.line(line_image, (x1, y1), (x2, y2), (48, 255, 255), 20)
+            x1, y1, x2, y2 = line[4]
+            cv2.line(line_image, (x1, y1), (x2, y2), (48, 255, 255), 20)        
 			
             
             
