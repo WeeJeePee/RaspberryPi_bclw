@@ -1,7 +1,19 @@
-// inport lcd lib
-#include <LiquidCrystal.h>
-
-// import gps lib
+// Test code for Ultimate GPS Using Hardware Serial (e.g. GPS Flora or FeatherWing)
+//
+// This code shows how to listen to the GPS module via polling. Best used with
+// Feathers or Flora where you have hardware Serial and no interrupt
+//
+// Tested and works great with the Adafruit GPS FeatherWing
+// ------> https://www.adafruit.com/products/3133
+// or Flora GPS
+// ------> https://www.adafruit.com/products/1059
+// but also works with the shield, breakout
+// ------> https://www.adafruit.com/products/1272
+// ------> https://www.adafruit.com/products/746
+// 
+// Pick one up today at the Adafruit electronics shop
+// and help support open source hardware & software! -ada
+     
 #include <Adafruit_GPS.h>
 
 // what's the name of the hardware serial port?
@@ -17,13 +29,14 @@ Adafruit_GPS GPS(&GPSSerial);
 uint32_t timer = millis();
 
 
-// initialize the library by associating any needed LCD interface pin
-const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 6, d7 = 7;
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-
-void setup() {
-  // set up the LCD's number of columns and rows:
-  lcd.begin(16, 2);
+void setup()
+{
+  //while (!Serial);  // uncomment to have the sketch wait until Serial is ready
+  
+  // connect at 115200 so we can read the GPS fast enough and echo without dropping chars
+  // also spit it out
+  Serial.begin(115200);
+  Serial.println("Adafruit GPS library basic test!");
      
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
   GPS.begin(9600);
@@ -47,8 +60,9 @@ void setup() {
   GPSSerial.println(PMTK_Q_RELEASE);
 }
 
-void loop() {
-   // read data from the GPS in the 'main loop'
+void loop() // run over and over again
+{
+  // read data from the GPS in the 'main loop'
   char c = GPS.read();
   // if you want to debug, this is a good time to do it!
   if (GPSECHO)
@@ -67,35 +81,27 @@ void loop() {
      
   // approximately every 2 seconds or so, print out the current stats
   if (millis() - timer > 2000) {
-//    timer = millis(); // reset the timer
-//    Serial.print("\nTime: ");
-//    Serial.print(GPS.hour, DEC); Serial.print(':');
-//    Serial.print(GPS.minute, DEC); Serial.print(':');
-//    Serial.print(GPS.seconds, DEC); Serial.print('.');
-//    Serial.println(GPS.milliseconds);
-//    Serial.print("Date: ");
-//    Serial.print(GPS.day, DEC); Serial.print('/');
-//    Serial.print(GPS.month, DEC); Serial.print("/20");
-//    Serial.println(GPS.year, DEC);
-//    Serial.print("Fix: "); Serial.print((int)GPS.fix);
-//    Serial.print(" quality: "); Serial.println((int)GPS.fixquality);
-////    if (GPS.fix) {
-//      Serial.print("Location: ");
-//      Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
-//      Serial.print(", ");
-//      Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
-//      Serial.print("Speed (knots): "); Serial.println(GPS.speed);
-//      Serial.print("Angle: "); Serial.println(GPS.angle);
-//      Serial.print("Altitude: "); Serial.println(GPS.altitude);
-//      Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
-////    }
-    lcd.noDisplay();
-    lcd.display();
-    lcd.setCursor(0, 0);
-    lcd.print("Fix: "); lcd.print((int)GPS.fix);
-    lcd.setCursor(0, 1);
-    lcd.print(GPS.hour, DEC); lcd.print(':');
-    lcd.print(GPS.minute, DEC); lcd.print(':');
-    lcd.print(GPS.seconds, DEC); lcd.print('.');
+    timer = millis(); // reset the timer
+    Serial.print("\nTime: ");
+    Serial.print(GPS.hour, DEC); Serial.print(':');
+    Serial.print(GPS.minute, DEC); Serial.print(':');
+    Serial.print(GPS.seconds, DEC); Serial.print('.');
+    Serial.println(GPS.milliseconds);
+    Serial.print("Date: ");
+    Serial.print(GPS.day, DEC); Serial.print('/');
+    Serial.print(GPS.month, DEC); Serial.print("/20");
+    Serial.println(GPS.year, DEC);
+    Serial.print("Fix: "); Serial.print((int)GPS.fix);
+    Serial.print(" quality: "); Serial.println((int)GPS.fixquality);
+    if (GPS.fix) {
+      Serial.print("Location: ");
+      Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
+      Serial.print(", ");
+      Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
+      Serial.print("Speed (knots): "); Serial.println(GPS.speed);
+      Serial.print("Angle: "); Serial.println(GPS.angle);
+      Serial.print("Altitude: "); Serial.println(GPS.altitude);
+      Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
+    }
   }
 }
